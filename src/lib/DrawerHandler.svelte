@@ -6,50 +6,53 @@
 	const drawerStore = getDrawerStore();
 	let drawer: HTMLElement | null = null;
 	let initial = { x: 0, y: 0, height: 0 };
-	function handleMouseDown(e: CustomEvent<MouseEvent>) {
+	function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
+		
 		const drawerContent = document.querySelector('.drawer-content');
-		if (drawerContent && drawerContent.contains(e.detail.target as HTMLElement)) return;
+		if (drawerContent && drawerContent.contains(e.target as HTMLElement)) return;
 		drawer = document.querySelector('.drawer');
 		if (!drawer) return;
-		e.preventDefault();
+		if(!(e instanceof TouchEvent)) e.preventDefault();
+		const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.detail.clientX;
+		const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.detail.clientY;
 		initial = {
-			x: e.detail.clientX,
-			y: e.detail.clientY,
+			x: clientX,
+			y: clientY,
 			height: drawer.getBoundingClientRect().height
 		};
-		drawer.style.transition = 'transform 0.3s ease-out';
+		drawer.style.transition = 'transform 0.1s ease-out';
 		drawer.style.overflow = 'unset';
 		drawer.style.transform = `translateY(0)`;
 	}
 
-	function handleMouseMove(e: MouseEvent) {
+	function handleMouseMove(e: MouseEvent | TouchEvent) {
 		if (!drawer) return;
-
-		if (initial.y - e.clientY < 0) {
-			drawer.style.transform = `translateY(${e.clientY - initial.y}px)`;
+		const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.clientY;
+		if (initial.y - clientY < 0) {
+			drawer.style.transform = `translateY(${clientY - initial.y}px)`;
 			drawer.style.height = `${initial.height}px`;
 		} else {
 			if(initial.y > window.innerHeight) window.innerHeight = initial.y;
 			if(initial.y < 0) initial.y = 0;
-			let diff = initial.y - e.clientY;
+			let diff = initial.y - clientY;
 
-			console.log('before', diff)
 			if (diff > 0) {
 				diff = (diff / (window.innerHeight - initial.height)) * initial.height * 0.2;
 			} 
 			if(diff > initial.height*0.2){
 				diff = initial.height*0.2;
 			}
-			console.log('after', diff);
-
 			drawer.style.transform = `translateY(${-diff}px)`;
 		}
 	}
 
-	function handleMouseUp(e: MouseEvent) {
+	function handleMouseUp(e: MouseEvent | TouchEvent) {
 		if (!drawer) return;
+		//if(e instanceof TouchEvent && e.touches.length == 0) return;
 		e.preventDefault();
-		if (initial.y - e.clientY < initial.height / 2) {
+		
+		const clientY = e instanceof TouchEvent ? e.changedTouches[0].clientY : e.clientY;
+		if (initial.y - clientY < initial.height / 2) {
 			drawerStore.close();
 		} else {
 			drawer.style.transform = `translateY(0)`;
@@ -72,9 +75,11 @@
 <svelte:window
 	on:mouseup={handleMouseUp}
 	on:mousemove={handleMouseMove}
+	on:touchmove={handleMouseMove}
+	on:touchend={handleMouseUp}
 	on:selectstart={handleSelect}
 />
-<Drawer on:drawer={handleMouseDown} on:backdrop={handleBackdrop}>
+<Drawer on:touchstart={handleMouseDown} on:drawer={handleMouseDown} on:backdrop={handleBackdrop}>
 	{#if $drawerStore.id === shareId}
 		<ShareDrawer />
 	{:else}
