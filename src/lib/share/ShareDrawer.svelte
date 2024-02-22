@@ -31,8 +31,8 @@
 
 <div class="share-drawer-content flex flex-col items-center py-4">
 	<div class="handle my-2 h-2 w-10 rounded-full bg-[#D4D4D8]" />
-	<div class="drawer-content flex flex-col items-center">
-		<div class="mx-auto my-5 flex max-w-full gap-5 overflow-x-auto px-4 md:px-8">
+	<div class="drawer-content flex flex-col items-center w-full">
+		<div class="mx-auto my-2 flex max-w-full gap-5 overflow-x-auto px-4 md:px-8 py-3 snap-x">
 			{#each shareProviders as provider}
 				<SocialShareButton
 					name={provider.name}

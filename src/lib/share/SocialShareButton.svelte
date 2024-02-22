@@ -6,7 +6,7 @@
     export let link = '';
 </script>
 
-<a href={link} target="_blank" class="btn p-0 flex flex-col justify-center items-center">
+<a href={link} target="_blank" class="btn p-0 flex flex-col justify-center items-center snap-center">
 	<div class="bg-white shadow-md p-2 rounded-xl">
 		<Icon icon={icon} height={56} />
 	</div>
