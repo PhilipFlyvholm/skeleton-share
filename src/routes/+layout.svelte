@@ -3,11 +3,12 @@
 	import '../app.pcss';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import DrawerHandler from '$lib/DrawerHandler.svelte';
+	import Footer from './footer.svelte';
 	initializeStores();
 </script>
 <DrawerHandler />
 <AppShell>
-	<svelte:fragment slot="header">Header</svelte:fragment>
+	<!--<svelte:fragment slot="header">Header</svelte:fragment>-->
 	<!-- (sidebarLeft) -->
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
@@ -15,5 +16,5 @@
 	<slot />
 	<!-- ---- / ---- -->
 	<!-- (pageFooter) -->
-	<svelte:fragment slot="footer">Footer</svelte:fragment>
+	<svelte:fragment slot="footer"><Footer/></svelte:fragment>
 </AppShell>
