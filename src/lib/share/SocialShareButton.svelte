@@ -14,10 +14,10 @@
     }
 </script>
 
-<a href={provider.getShareUrl(shareData)} on:click target="_blank" class="btn p-0 flex flex-col justify-center items-center snap-center">
+<a href={provider.getShareUrl(shareData)} on:click target="_blank" class="btn p-0 flex flex-col justify-center items-center snap-center min-w-[72px]">
 	<div class="{style.background} {style.shadow} {style.rounded} {style.overflow}" class:p-2={!provider.image} >
         {#if provider.image}
-            <img src={provider.image} alt={provider.name} class="h-[72px]" >
+            <img src={provider.image} alt={provider.name} class="h-[72px] w-[72px]" >
         {:else}
             <Icon icon={provider.icon} height={56} />
         {/if}
