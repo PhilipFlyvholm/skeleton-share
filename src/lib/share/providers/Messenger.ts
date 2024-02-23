@@ -1,7 +1,9 @@
 import type { ShareProvider } from "./index.js";
+import MessengerImage from '$lib/assets/messenger.webp';
 const MessengerProvider = (FACEBOOK_APP_ID: string):ShareProvider => ({
     name: 'Messenger',
     icon: 'tabler:brand-messenger',
+    image: MessengerImage,
     getShareUrl: (shareData) => {
         const text = shareData.text || shareData.title;
         const url = new URL(shareData.url);

@@ -1,7 +1,9 @@
 import type { ShareProvider } from "./index.js";
+import LinkedinImage from '$lib/assets/linkedin.webp';
 const LinkedInProvider: ShareProvider = {
     name: 'LinkedIn',
     icon: 'tabler:brand-linkedin',
+    image: LinkedinImage,
     getShareUrl: (shareData) => {
         const text = shareData.text || shareData.title;
         const url = new URL(shareData.url);

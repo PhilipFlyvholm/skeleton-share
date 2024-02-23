@@ -1,7 +1,9 @@
 import type { ShareProvider } from "./index.js";
+import WhatsAppImage from '$lib/assets/whatsapp.webp';
 const WhatsAppProvider: ShareProvider = {
     name: 'WhatsApp',
     icon: 'tabler:brand-whatsapp',
+    image: WhatsAppImage,
     getShareUrl: (shareData) => {
         const message = shareData.text || shareData.title;
         const url = new URL(shareData.url);

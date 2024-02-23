@@ -1,8 +1,15 @@
 <script lang="ts">
-	import { shareDrawerSettings, shareId } from '$lib/share/ShareDrawerSettings.js';
+	import { shareDrawerSettings } from '$lib/share/ShareDrawerSettings.js';
 	import { getDrawerStore } from '@skeletonlabs/skeleton';
 
 	const drawerStore = getDrawerStore();
+	const shareDrawer = shareDrawerSettings(
+		{
+			title: 'Share this page',
+			text: 'This is a description',
+			url: 'https://skeleton.skeletonlabs.com'
+		}
+	);
 </script>
 
 <div class="container m-auto flex h-full flex-col items-center justify-center">
@@ -11,10 +18,11 @@
 	<button
 		type="button"
 		class="variant-filled-primary btn my-2"
-		on:click={() => drawerStore.open(shareDrawerSettings({
-            title: 'Share this page',
-            text: 'This is a description',
-            url: 'https://skeleton.skeletonlabs.com',
-        }))}>Open Share Drawer</button
+		on:click={() => drawerStore.open(shareDrawer)}>Open Share Drawer</button
+	>
+	<button
+		type="button"
+		class="variant-filled-primary btn my-2"
+		on:click={() => drawerStore.open({ id: 'test' })}>Open non-share Drawer</button
 	>
 </div>

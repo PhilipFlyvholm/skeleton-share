@@ -1,4 +1,5 @@
-import type { DrawerSettings } from '@skeletonlabs/skeleton';
+import type { DrawerSettings, DrawerStore } from '@skeletonlabs/skeleton';
+import { get } from 'svelte/store';
 
 export type ShareDrawerData = {
 	title: string;
@@ -10,14 +11,19 @@ export type ShareDrawerData = {
 
 export const shareId = 'share-drawer';
 
-export function shareDrawerSettings(data: ShareDrawerData): DrawerSettings {
+export function shareDrawerSettings(data: ShareDrawerData, drawerSettings?: Omit<DrawerSettings, "id" | "position">): DrawerSettings {
 	return {
+		...drawerSettings,
 		id: shareId,
 		position: 'bottom',
-		bgDrawer: 'bg-[#F2F2F2] text-[#383838]',
-		width: 'w-full lg:w-auto lg:max-w-[680px] mx-auto',
-		height: 'h-auto',
-		rounded: 'rounded-t-xl',
-		meta: data
+		bgDrawer: drawerSettings?.bgDrawer || 'bg-[#F2F2F2] text-[#383838]',
+		width: drawerSettings?.width || 'w-full lg:w-auto lg:max-w-[680px] mx-auto',
+		height: drawerSettings?.rounded || 'h-auto',
+		rounded: drawerSettings?.rounded || 'rounded-t-xl',
+		meta: {...drawerSettings, ...data}
 	};
+}
+
+export function isShareDrawer(drawerStore: DrawerStore | undefined): boolean {
+	return drawerStore !== undefined && get(drawerStore).id === shareId;
 }

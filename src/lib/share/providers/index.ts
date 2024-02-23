@@ -1,15 +1,14 @@
 import type { ShareDrawerData } from "../ShareDrawerSettings.js";
-import EmailProvider from "./Email.js";
-import FacebookProvider from "./Facebook.js";
-import LinkedInProvider from "./LinkedIn.js";
-import MessengerProvider from "./Messenger.js";
-import WhatsAppProvider from "./WhatsApp.js";
-import XProvider from "./X.js";
-
 export interface ShareProvider {
     getShareUrl: (shareData: ShareDrawerData, providerData?: unknown) => string;
     name: string;
     icon: string;
+    image?: string;
 }
 
-export const shareProviders: ShareProvider[] = [FacebookProvider, MessengerProvider(""), XProvider, WhatsAppProvider, LinkedInProvider, EmailProvider];
+export {default as FacebookProvider} from "./Facebook.js";
+export {default as MessengerProvider} from "./Messenger.js";
+export {default as XProvider} from "./X.js";
+export {default as EmailProvider} from "./Email.js";
+export {default as WhatsAppProvider} from "./WhatsApp.js";
+export {default as LinkedInProvider} from "./LinkedIn.js";

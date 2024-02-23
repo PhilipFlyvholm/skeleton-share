@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
 	import ShareDrawer from '$lib/share/ShareDrawer.svelte';
-	import { shareId } from '$lib/share/ShareDrawerSettings.js';
-	import { initDrawer } from './ShareDrawerHandler.js';
+	import { isShareDrawer } from '$lib/share/ShareDrawerSettings.js';
+	import { EmailProvider, FacebookProvider, LinkedInProvider, MessengerProvider, WhatsAppProvider, XProvider, type ShareProvider } from './share/providers/index.js';
 
 	const drawerStore = getDrawerStore();
-	let drawerEl:Drawer;
-	$: initDrawer(drawerEl, drawerStore);
+	let drawer:Drawer;
+	
+	const shareProviders: ShareProvider[] = [EmailProvider, FacebookProvider, MessengerProvider(""), XProvider, WhatsAppProvider, LinkedInProvider];
 </script>
 
-<Drawer bind:this={drawerEl}>
-	{#if $drawerStore.id === shareId}
-		<ShareDrawer />
+<Drawer bind:this={drawer}>
+	{#if isShareDrawer(drawerStore)}
+		<ShareDrawer {drawer} {shareProviders}
+		/>
 	{:else}
 		<!-- Fallback Error -->
 		<div class="flex h-full w-full items-center justify-center">
@@ -22,19 +24,3 @@
 		</div>
 	{/if}
 </Drawer>
-
-<style>
-	:global(.drawer){
-		overflow: unset;
-	}
-	:global(.drawer::after){
-		position: absolute;
-		top: 100%;
-		bottom: initial;
-		left: 0;
-		right: 0;
-		content: '';
-		background: inherit;
-		height: 100%;
-	}
-</style>
