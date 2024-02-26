@@ -2,14 +2,14 @@
 	import type { ComponentProps } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
-	import type { ShareDrawerData } from './ShareDrawerSettings.js';
-	import SocialShareButton from './SocialShareButton.svelte';
+	import type { ShareDrawerData } from '$lib/share/ShareDrawerSettings.js';
+	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.js';
-	import type { ShareProvider } from './providers/index.js';
+	import type { ShareProvider } from '$lib/providers/index.js';
 	import { createEventDispatcher } from 'svelte';
-	import type { ShareEvents } from './ShareEvents.js';
-	import UtilityShareButton from './UtilityShareButton.svelte';
+	import type { ShareEvents } from '$lib/share/ShareEvents.js';
+	import UtilityShareButton from '$lib/share/UtilityShareButton.svelte';
 
 	const dispatch = createEventDispatcher<ShareEvents>();
 	export let drawer: Drawer;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import type { ShareProvider } from './providers/index.js';
+	import type { ShareProvider } from '../providers/index.js';
 	import type { ShareDrawerData } from './ShareDrawerSettings.js';
 
     export let provider:ShareProvider;

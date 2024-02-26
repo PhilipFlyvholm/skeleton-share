@@ -1,4 +1,4 @@
-import type { ShareDrawerData } from "../ShareDrawerSettings.js";
+import type { ShareDrawerData } from "../share/ShareDrawerSettings.js";
 export interface ShareProvider {
     getShareUrl: (shareData: ShareDrawerData, providerData?: unknown) => string;
     name: string;

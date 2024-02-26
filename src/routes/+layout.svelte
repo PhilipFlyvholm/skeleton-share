@@ -2,7 +2,7 @@
 	import { AppShell } from '@skeletonlabs/skeleton';
 	import '../app.pcss';
 	import { initializeStores } from '@skeletonlabs/skeleton';
-	import DrawerHandler from '$lib/DrawerHandler.svelte';
+	import DrawerHandler from './DrawerHandler.svelte';
 	import Footer from './footer.svelte';
 	initializeStores();
 </script>

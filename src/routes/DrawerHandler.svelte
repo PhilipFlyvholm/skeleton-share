@@ -2,7 +2,7 @@
 	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
 	import ShareDrawer from '$lib/share/ShareDrawer.svelte';
 	import { isShareDrawer } from '$lib/share/ShareDrawerSettings.js';
-	import { EmailProvider, FacebookProvider, LinkedInProvider, MessengerProvider, WhatsAppProvider, XProvider, type ShareProvider } from './share/providers/index.js';
+	import { EmailProvider, FacebookProvider, LinkedInProvider, MessengerProvider, WhatsAppProvider, XProvider, type ShareProvider } from '../lib/providers/index.js';
 
 	const drawerStore = getDrawerStore();
 	let drawer:Drawer;

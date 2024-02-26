@@ -1,7 +1,7 @@
 import type { DrawerStore } from '@skeletonlabs/skeleton';
-import { shareDrawerSettings } from './share/ShareDrawerSettings.js';
+import { shareDrawerSettings } from  './share/ShareDrawerSettings.js';
 
-type Share = {
+export type Share = {
 	title: string;
 	url: string;
 	text?: string;
