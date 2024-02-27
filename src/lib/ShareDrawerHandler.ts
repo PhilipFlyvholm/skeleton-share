@@ -22,7 +22,8 @@ function setTranslate(drawer: HTMLElement, y: number) {
 
 function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
 	if(!isShareDrawer()) return; 
-	if (e instanceof MouseEvent && e.button !== 0) return;
+	if (e.detail instanceof MouseEvent && e.detail.button !== 0) return;
+	
 	if (!drawerStore || !get(drawerStore).open) return;
 	const drawerContent = document.querySelector('.drawer-content');
 	if (
@@ -78,6 +79,7 @@ function reset(transform: boolean) {
 function handleMouseUp(e: MouseEvent | TouchEvent) {
 	if(!isShareDrawer()) return;
 	if (e instanceof MouseEvent && e.button !== 0) return;
+	
 	if (!drawer) return;
 	const target = e.target as HTMLElement;
 	if (target && target.classList !== undefined && target.classList.contains('drawer-backdrop')) {
