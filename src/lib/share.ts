@@ -1,5 +1,5 @@
-import type { DrawerStore } from '@skeletonlabs/skeleton';
-import { shareDrawerSettings } from  './share/ShareDrawerSettings.js';
+import type { DrawerSettings, DrawerStore } from '@skeletonlabs/skeleton';
+import { shareDrawerSettings, type OverridableDrawerSettings } from './share/ShareDrawerSettings.js';
 
 export type Share = {
 	title: string;
@@ -8,46 +8,48 @@ export type Share = {
 	clipboardText?: string;
 	files?: File[];
 };
+export enum ShareType {
+	Native = 'Native',
+	UI = 'UI'
+}
+const { Native, UI } = ShareType;
 
 export function share(
 	data: Share,
-	drawerStore: DrawerStore
-) {
-    const { title, url, text, files } = data;
-    const clipboardText = data.clipboardText || text;
-	if (navigator.canShare !== undefined && navigator.share) {
-		console.log('Sharing');
-		const shareObject = createShareObject(title, url, text, files);
-		navigator
-			.share(shareObject)
-			.then(() => {
-				console.log('Share was successful.');
-			})
-			.catch(() => {
-				console.log('Sharing via UI');
-				drawerStore.open(
-					shareDrawerSettings({
-						title,
-						url,
-						text,
-						clipboardMessage: clipboardText || text,
-						files: files
-					})
-				);
-			});
-	} else {
-		console.log('Sharing (directly) via UI');
-
-		drawerStore.open(
-			shareDrawerSettings({
-				title,
-				url,
-				text: text,
-				clipboardMessage: clipboardText,
-				files: files
-			})
-		);
-	}
+	drawerStore: DrawerStore,
+	drawerSettings: OverridableDrawerSettings | undefined = undefined,
+	preferNative = false
+): Promise<ShareType> {
+	return new Promise((resolve, reject) => {
+		const { title, url, text, files } = data;
+		const clipboardText = data.clipboardText || text;
+		const openDrawer = () => {
+			drawerStore.open(
+				shareDrawerSettings({
+					title,
+					url,
+					text: text,
+					clipboardMessage: clipboardText,
+					files: files
+				}, drawerSettings)
+			);
+		};
+		if (preferNative && navigator.canShare !== undefined && navigator.share) {
+			const shareObject = createShareObject(title, url, text, files);
+			navigator
+				.share(shareObject)
+				.then(() => {
+					resolve(Native);
+				})
+				.catch(() => {
+					openDrawer();
+					resolve(UI);
+				});
+		} else {
+			openDrawer();
+			resolve(UI)
+		}
+	});
 }
 
 function createShareObject(title: string, url: string, text?: string, files?: File[]): ShareData {

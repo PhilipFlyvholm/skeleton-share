@@ -1,12 +1,14 @@
 <script lang="ts">
+	import type { CssClasses } from "@skeletonlabs/skeleton";
+
 	export let style:{
-        background?: string,
-        color?: string,
-        shadow?: string,
-        rounded?: string,
-        overflow?: string,
-        margin?: string,
-        width?: string
+        background?: CssClasses,
+        color?: CssClasses,
+        shadow?: CssClasses,
+        rounded?: CssClasses,
+        overflow?: CssClasses,
+        margin?: CssClasses,
+        width?: CssClasses
     };
 </script>
 

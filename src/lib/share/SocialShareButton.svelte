@@ -2,20 +2,22 @@
 	import Icon from '@iconify/svelte';
 	import type { ShareProvider } from '../providers/index.js';
 	import type { ShareDrawerData } from './ShareDrawerSettings.js';
+	import type { CssClasses } from '@skeletonlabs/skeleton';
 
     export let provider:ShareProvider;
     export let shareData:ShareDrawerData;
     export let style:{
-        background?: string,
-        shadow?: string,
-        rounded?: string,
-        overflow?: string,
-        text?: string
+        background?: CssClasses,
+        shadow?: CssClasses,
+        rounded?: CssClasses,
+        overflow?: CssClasses,
+        text?: CssClasses
     }
-</script>
 
+    $: classes = `${style.background} ${style.shadow} ${style.rounded} ${style.overflow} ${$$props.class ?? ''}`
+</script>
 <a href={provider.getShareUrl(shareData)} on:click target="_blank" class="btn p-0 flex flex-col justify-center items-center snap-center min-w-[72px]">
-	<div class="{style.background} {style.shadow} {style.rounded} {style.overflow}" class:p-2={!provider.image} >
+	<div class="{classes}" class:p-2={!provider.image} >
         {#if provider.image}
             <img src={provider.image} alt={provider.name} class="h-[72px] w-[72px]" >
         {:else}

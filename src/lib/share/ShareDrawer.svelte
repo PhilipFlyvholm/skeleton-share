@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
 	import Icon from '@iconify/svelte';
-	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
+	import { Drawer, getDrawerStore, type CssClasses } from '@skeletonlabs/skeleton';
 	import type { ShareDrawerData } from '$lib/share/ShareDrawerSettings.js';
 	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
 	import { onDestroy, onMount } from 'svelte';
@@ -17,29 +17,35 @@
 	export let style: {
 		socialShareButton?: ComponentProps<SocialShareButton>['style'];
 		utilityButton?: ComponentProps<UtilityShareButton>['style'];
-		spacerBackground?: string;
-		handleBackground?: string;
+		spacerBackground?: CssClasses;
+		handleBackground?: CssClasses;
 	} = {};
+	//IOS:
+	//socialShareButton: 'bg-white'
+	//utilityButton: 'bg-white'
+	//spacerBackground: 'bg-gray-200'
+	//handleBackground: 'bg-gray-300'
 	$: computedStyle = {
+		...style,
 		socialShareButton: {
-			background: 'bg-white',
-			shadow: 'shadow-md',
-			rounded: 'rounded-xl',
-			overflow: 'overflow-hidden',
-			text: 'mt-1 !mx-0',
-			...style.socialShareButton
+			...style.socialShareButton,
+			background: style.socialShareButton?.background || 'bg-surface-50-900-token',
+			shadow:  style.socialShareButton?.shadow || 'shadow-md',
+			rounded: style.socialShareButton?.rounded || 'rounded-xl',
+			overflow: style.socialShareButton?.overflow || 'overflow-hidden',
+			text: style.socialShareButton?.text ||'mt-1 !mx-0',
 		},
 		utilityButton: {
-			background: 'bg-white',
-			shadow: 'shadow',
-			rounded: '',
-			overflow: '',
-			margin: 'my-2',
-			width: 'min-w-[50%]'
+			...style.utilityButton,
+			background: style.utilityButton?.background || 'bg-surface-50-900-token',
+			shadow: style.utilityButton?.shadow || 'shadow',
+			rounded: style.utilityButton?.rounded || '',
+			overflow: style.utilityButton?.overflow || '',
+			margin: style.utilityButton?.margin || 'my-2',
+			width: style.utilityButton?.width || 'min-w-[50%]'
 		},
-		spacerBackground: 'bg-gray-200',
-		handleBackground: 'bg-gray-300',
-		...style
+		spacerBackground: style.spacerBackground || 'bg-surface-300',
+		handleBackground: style.handleBackground || 'bg-surface-300',
 	};
 
 	const drawerStore = getDrawerStore();
@@ -83,7 +89,12 @@
 					style={computedStyle.socialShareButton}
 					{provider}
 					{shareData}
-					on:click={() => dispatch('social-share', { provider: provider.name })}
+					on:click={() => {
+						const continued = dispatch('social-share', { provider: provider.name }, { cancelable: true })
+						if (continued) {
+							drawerStore.close();
+						}
+					}}
 				/>
 			{/each}
 		</div>
