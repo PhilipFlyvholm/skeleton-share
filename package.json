@@ -20,7 +20,12 @@
 		},
 		"./providers": {
 			"types": "./dist/providers/index.d.ts",
-			"svelte": "./dist/providers/index.js"
+			"default": "./dist/providers/index.js"
+		}
+	},
+	"typesVersions": {
+		">4.0": {
+			"providers": ["./dist/providers/index.d.ts"]
 		}
 	},
 	"files": [
