@@ -1,5 +1,8 @@
 import type { DrawerSettings, DrawerStore } from '@skeletonlabs/skeleton';
-import { shareDrawerSettings, type OverridableDrawerSettings } from './share/ShareDrawerSettings.js';
+import {
+	shareDrawerSettings,
+	type OverridableDrawerSettings
+} from './share/ShareDrawerSettings.js';
 
 export type Share = {
 	title: string;
@@ -25,13 +28,16 @@ export function share(
 		const clipboardText = data.clipboardText || text;
 		const openDrawer = () => {
 			drawerStore.open(
-				shareDrawerSettings({
-					title,
-					url,
-					text: text,
-					clipboardMessage: clipboardText,
-					files: files
-				}, drawerSettings)
+				shareDrawerSettings(
+					{
+						title,
+						url,
+						text: text,
+						clipboardMessage: clipboardText,
+						files: files
+					},
+					drawerSettings
+				)
 			);
 		};
 		if (preferNative && navigator.canShare !== undefined && navigator.share) {
@@ -47,7 +53,7 @@ export function share(
 				});
 		} else {
 			openDrawer();
-			resolve(UI)
+			resolve(UI);
 		}
 	});
 }

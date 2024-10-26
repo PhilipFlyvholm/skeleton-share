@@ -41,13 +41,16 @@
 	<button
 		type="button"
 		class="variant-filled-primary btn my-2"
-		on:click={() => drawerStore.open(shareDrawer)}>Open Share Drawer</button
+		onclick={() => drawerStore.open(shareDrawer)}>Open Share Drawer</button
 	>
-	<div class="fixed right-2 top-2 flex justify-center items-center gap-2">
-		<button class="btn variant-soft-surface hover:variant-soft-primary" use:popup={{ event: 'click', target: 'theme', closeQuery: 'a[href]' }}>
-			<i class="fa-solid fa-palette text-lg md:!hidden" />
+	<div class="fixed right-2 top-2 flex items-center justify-center gap-2">
+		<button
+			class="variant-soft-surface btn hover:variant-soft-primary"
+			use:popup={{ event: 'click', target: 'theme', closeQuery: 'a[href]' }}
+		>
+			<i class="fa-solid fa-palette text-lg md:!hidden"></i>
 			<span class="hidden md:inline-block">Theme</span>
-			<i class="fa-solid fa-caret-down opacity-50" />
+			<i class="fa-solid fa-caret-down opacity-50"></i>
 		</button>
 		<div class="card w-60 p-4 shadow-xl" data-popup="theme">
 			<nav class="list-nav -m-4 max-h-64 overflow-y-auto p-4 lg:max-h-[500px]">

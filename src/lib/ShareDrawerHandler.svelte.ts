@@ -1,8 +1,6 @@
 import { type Drawer, type DrawerStore } from '@skeletonlabs/skeleton';
 import { get } from 'svelte/store';
-import { isShareDrawer as isShareDrawerBase} from '$lib/share/ShareDrawerSettings.js';
-import type { EventDispatcher } from 'svelte';
-import type { ShareEvents } from './share/ShareEvents.js';
+import { isShareDrawer as isShareDrawerBase } from '$lib/share/ShareDrawerSettings.js';
 const extraOffsetPercentage = 0.5;
 
 let drawerStore: DrawerStore | undefined = undefined;
@@ -11,19 +9,19 @@ let drawer: HTMLElement | null = null;
 let prev = 0;
 let momentum = 0;
 
-let dispatch: EventDispatcher<ShareEvents> | undefined = undefined;
+let onClose = $state<(() => void) | undefined>(undefined);
 
 const isTouchEvent = (e: Event): e is TouchEvent => window.TouchEvent && e instanceof TouchEvent;
-const isShareDrawer = ()  => isShareDrawerBase(drawerStore);
+const isShareDrawer = () => isShareDrawerBase(drawerStore);
 
 function setTranslate(drawer: HTMLElement, y: number) {
 	drawer.style.transform = `translateY(${y}px)`;
 }
 
 function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
-	if(!isShareDrawer()) return; 
+	if (!isShareDrawer()) return;
 	if (e.detail instanceof MouseEvent && e.detail.button !== 0) return;
-	
+
 	if (!drawerStore || !get(drawerStore).open) return;
 	const drawerContent = document.querySelector('.drawer-content');
 	if (
@@ -49,7 +47,7 @@ function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
 }
 
 function handleMouseMove(e: MouseEvent | TouchEvent) {
-	if(!isShareDrawer()) return;
+	if (!isShareDrawer()) return;
 	if (!drawer) return;
 
 	if (!drawerStore || !get(drawerStore).open) return;
@@ -77,9 +75,9 @@ function reset(transform: boolean) {
 }
 
 function handleMouseUp(e: MouseEvent | TouchEvent) {
-	if(!isShareDrawer()) return;
+	if (!isShareDrawer()) return;
 	if (e instanceof MouseEvent && e.button !== 0) return;
-	
+
 	if (!drawer) return;
 	const target = e.target as HTMLElement;
 	if (target && target.classList !== undefined && target.classList.contains('drawer-backdrop')) {
@@ -96,7 +94,7 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 		(momentum < 0 || (initial.height + diff) * 0.1 < initial.height / 2)
 	) {
 		drawerStore && drawerStore.close();
-		if(dispatch) dispatch('close');
+		onClose?.();
 		reset(false);
 	} else {
 		reset(true);
@@ -104,13 +102,15 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 }
 
 function handleBackdrop(e: CustomEvent<MouseEvent>) {
-	if(!isShareDrawer()) return;
+	if (!isShareDrawer()) return;
 	if (!drawer) return;
 
 	e.preventDefault();
 	setTimeout(() => {
 		if (!drawer && drawerStore) drawerStore.close();
-		if(dispatch) dispatch('close');
+		console.log('backdrop');
+		
+		onClose?.();
 	}, 2);
 }
 
@@ -118,9 +118,13 @@ function handleSelect(e: Event) {
 	if (!drawer) return;
 	e.preventDefault();
 }
-export function initDrawer(drawerComponent: Drawer | undefined, drawerStoreInstance: DrawerStore, eventDispatcher: EventDispatcher<ShareEvents>) {
+export function initDrawer(
+	drawerComponent: Drawer | undefined,
+	drawerStoreInstance: DrawerStore,
+	onCloseCallback: typeof onClose
+) {
 	if (!drawerComponent) return;
-	dispatch = eventDispatcher;
+	onClose = onCloseCallback;
 	drawerStore = drawerStoreInstance;
 	drawerComponent.$on('drawer', handleMouseDown);
 	drawerComponent.$on('touchstart', handleMouseDown);

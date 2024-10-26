@@ -10,8 +10,11 @@ export type ShareDrawerData = {
 };
 
 export const shareId = 'share-drawer';
-export type OverridableDrawerSettings = Omit<DrawerSettings, "id" | "position">
-export function shareDrawerSettings(data: ShareDrawerData, drawerSettings?: OverridableDrawerSettings): DrawerSettings {
+export type OverridableDrawerSettings = Omit<DrawerSettings, 'id' | 'position'>;
+export function shareDrawerSettings(
+	data: ShareDrawerData,
+	drawerSettings?: OverridableDrawerSettings
+): DrawerSettings {
 	return {
 		...drawerSettings,
 		id: shareId,
@@ -20,7 +23,7 @@ export function shareDrawerSettings(data: ShareDrawerData, drawerSettings?: Over
 		width: drawerSettings?.width || 'w-full lg:w-auto lg:max-w-[680px] mx-auto',
 		height: drawerSettings?.rounded || 'h-auto',
 		rounded: drawerSettings?.rounded || 'rounded-t-xl',
-		meta: {...drawerSettings, ...data}
+		meta: { ...drawerSettings, ...data }
 	};
 }
 

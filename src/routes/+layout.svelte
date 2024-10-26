@@ -7,6 +7,13 @@
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 
 	import { storePopup } from '@skeletonlabs/skeleton';
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let { children } = $props();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	initializeStores();
@@ -19,8 +26,10 @@
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
 	<!-- Router Slot -->
-	<slot />
+	{@render children?.()}
 	<!-- ---- / ---- -->
 	<!-- (pageFooter) -->
-	<svelte:fragment slot="footer"><Footer /></svelte:fragment>
+	{#snippet footer()}
+		<Footer />
+	{/snippet}
 </AppShell>

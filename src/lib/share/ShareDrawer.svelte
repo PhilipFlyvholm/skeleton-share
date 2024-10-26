@@ -5,48 +5,63 @@
 	import type { ShareDrawerData } from '$lib/share/ShareDrawerSettings.js';
 	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.js';
+	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
 	import type { ShareProvider } from '$lib/providers/index.js';
-	import { createEventDispatcher } from 'svelte';
-	import type { ShareEvents } from '$lib/share/ShareEvents.js';
 	import UtilityShareButton from '$lib/share/UtilityShareButton.svelte';
 
-	const dispatch = createEventDispatcher<ShareEvents>();
-	export let drawer: Drawer;
-	export let shareProviders: ShareProvider[];
-	export let style: {
-		socialShareButton?: ComponentProps<SocialShareButton>['style'];
-		utilityButton?: ComponentProps<UtilityShareButton>['style'];
-		spacerBackground?: CssClasses;
-		handleBackground?: CssClasses;
-	} = {};
+	interface Props {
+		drawer: Drawer;
+		shareProviders: ShareProvider[];
+		onClipboardSuccess?: () => void;
+		onClipboardFailed?: () => void;
+		onDownloadSuccess?: () => void;
+		onSocialShare?: (provider: string) => boolean;
+		onClose?: () => void;
+		style?: {
+			socialShareButton?: ComponentProps<typeof SocialShareButton>['style'];
+			utilityButton?: ComponentProps<typeof UtilityShareButton>['style'];
+			spacerBackground?: CssClasses;
+			handleBackground?: CssClasses;
+		};
+	}
+
+	let {
+		drawer,
+		shareProviders,
+		onClipboardSuccess,
+		onClipboardFailed,
+		onDownloadSuccess,
+		onSocialShare,
+		onClose,
+		style = {}
+	}: Props = $props();
 	//IOS:
 	//socialShareButton: 'bg-white'
 	//utilityButton: 'bg-white'
 	//spacerBackground: 'bg-gray-200'
 	//handleBackground: 'bg-gray-300'
-	$: computedStyle = {
+	let computedStyle = $derived({
 		...style,
 		socialShareButton: {
 			...style.socialShareButton,
 			background: style.socialShareButton?.background || 'bg-surface-50-900-token',
-			shadow:  style.socialShareButton?.shadow || 'shadow-md',
+			shadow: style.socialShareButton?.shadow || 'shadow-md',
 			rounded: style.socialShareButton?.rounded || 'rounded-xl',
 			overflow: style.socialShareButton?.overflow || 'overflow-hidden',
-			text: style.socialShareButton?.text ||'mt-1 !mx-0',
+			text: style.socialShareButton?.text || 'mt-1 !mx-0'
 		},
 		utilityButton: {
 			...style.utilityButton,
 			background: style.utilityButton?.background || 'bg-surface-50-900-token',
-			shadow: style.utilityButton?.shadow || 'shadow',
+			shadow: style.utilityButton?.shadow || 'shadow',
 			rounded: style.utilityButton?.rounded || '',
 			overflow: style.utilityButton?.overflow || '',
 			margin: style.utilityButton?.margin || 'my-2',
 			width: style.utilityButton?.width || 'min-w-[50%]'
 		},
 		spacerBackground: style.spacerBackground || 'bg-surface-300',
-		handleBackground: style.handleBackground || 'bg-surface-300',
-	};
+		handleBackground: style.handleBackground || 'bg-surface-300'
+	});
 
 	const drawerStore = getDrawerStore();
 
@@ -54,9 +69,9 @@
 	function handleClipboardCopy() {
 		if (navigator.clipboard && shareData.clipboardMessage) {
 			navigator.clipboard.writeText(shareData.clipboardMessage);
-			dispatch('clipboard-success');
+			onClipboardSuccess?.();
 		} else {
-			dispatch('clipboard-failed');
+			onClipboardFailed?.();
 		}
 		drawerStore.close();
 	}
@@ -68,11 +83,11 @@
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
-		dispatch('download-success');
+		onDownloadSuccess?.();
 	}
 
 	onMount(() => {
-		initDrawer(drawer, drawerStore, dispatch);
+		initDrawer(drawer, drawerStore, onClose);
 	});
 
 	onDestroy(() => {
@@ -81,7 +96,7 @@
 </script>
 
 <div class="share-drawer-content flex flex-col items-center py-4">
-	<div class="handle my-2 h-2 w-10 rounded-full {computedStyle.handleBackground}" />
+	<div class="handle my-2 h-2 w-10 rounded-full {computedStyle.handleBackground}"></div>
 	<div class="drawer-content flex w-full flex-col items-center">
 		<div class="mx-auto my-2 flex max-w-full snap-x gap-5 overflow-x-auto px-4 py-3 md:px-8">
 			{#each shareProviders as provider}
@@ -89,8 +104,8 @@
 					style={computedStyle.socialShareButton}
 					{provider}
 					{shareData}
-					on:click={() => {
-						const continued = dispatch('social-share', { provider: provider.name }, { cancelable: true })
+					onclick={() => {
+						const continued = onSocialShare ? onSocialShare(provider.name) : true;
 						if (continued) {
 							drawerStore.close();
 						}
@@ -98,13 +113,13 @@
 				/>
 			{/each}
 		</div>
-		<div class="spacer my-2 h-[1px] w-full {computedStyle.spacerBackground}" />
+		<div class="spacer my-2 h-[1px] w-full {computedStyle.spacerBackground}"></div>
 		{#if shareData.files && shareData.files.length > 0}
-			<UtilityShareButton style={computedStyle.utilityButton} on:click={() => handleDownload()}
+			<UtilityShareButton style={computedStyle.utilityButton} onclick={() => handleDownload()}
 				>Download image <Icon icon="tabler:file-download" /></UtilityShareButton
 			>
 		{/if}
-		<UtilityShareButton style={computedStyle.utilityButton} on:click={() => handleClipboardCopy()}
+		<UtilityShareButton style={computedStyle.utilityButton} onclick={() => handleClipboardCopy()}
 			>Copy to clipboard <Icon icon="tabler:clipboard-copy" /></UtilityShareButton
 		>
 	</div>
