@@ -1,8 +1,4 @@
-import type { DrawerSettings, DrawerStore } from '@skeletonlabs/skeleton';
-import {
-	shareDrawerSettings,
-	type OverridableDrawerSettings
-} from './share/ShareDrawerSettings.js';
+import { openShareDrawer } from "./share/ShareDrawerState.svelte.js";
 
 export type Share = {
 	title: string;
@@ -19,26 +15,21 @@ const { Native, UI } = ShareType;
 
 export function share(
 	data: Share,
-	drawerStore: DrawerStore,
-	drawerSettings: OverridableDrawerSettings | undefined = undefined,
 	preferNative = false
 ): Promise<ShareType> {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const { title, url, text, files } = data;
 		const clipboardText = data.clipboardText || text;
 		const openDrawer = () => {
-			drawerStore.open(
-				shareDrawerSettings(
-					{
-						title,
-						url,
-						text: text,
-						clipboardMessage: clipboardText,
-						files: files
-					},
-					drawerSettings
-				)
-			);
+			openShareDrawer(
+				{
+					title,
+					url,
+					text: text,
+					clipboardMessage: clipboardText,
+					files: files
+				}
+			)
 		};
 		if (preferNative && navigator.canShare !== undefined && navigator.share) {
 			const shareObject = createShareObject(title, url, text, files);

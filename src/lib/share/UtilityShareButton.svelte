@@ -1,15 +1,14 @@
 <script lang="ts">
-	import type { CssClasses } from '@skeletonlabs/skeleton';
 
 	interface Props {
 		style: {
-			background?: CssClasses;
-			color?: CssClasses;
-			shadow?: CssClasses;
-			rounded?: CssClasses;
-			overflow?: CssClasses;
-			margin?: CssClasses;
-			width?: CssClasses;
+			background?: string;
+			color?: string;
+			shadow?: string;
+			rounded?: string;
+			overflow?: string;
+			margin?: string;
+			width?: string;
 		};
 		onclick?: () => void;
 		children?: import('svelte').Snippet;

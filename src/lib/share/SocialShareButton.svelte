@@ -1,18 +1,17 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import type { ShareProvider } from '../providers/index.js';
-	import type { ShareDrawerData } from './ShareDrawerSettings.js';
-	import type { CssClasses } from '@skeletonlabs/skeleton';
+	import type { ShareDrawerData } from './ShareDrawerState.svelte.js';
 
 	interface Props {
 		provider: ShareProvider;
 		shareData: ShareDrawerData;
 		style: {
-			background?: CssClasses;
-			shadow?: CssClasses;
-			rounded?: CssClasses;
-			overflow?: CssClasses;
-			text?: CssClasses;
+			background?: string;
+			shadow?: string;
+			rounded?: string;
+			overflow?: string;
+			text?: string;
 			onclick?: () => void;
 		};
 		[key: string]: any;

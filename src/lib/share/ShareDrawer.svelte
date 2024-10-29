@@ -1,16 +1,15 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
 	import Icon from '@iconify/svelte';
-	import { Drawer, getDrawerStore, type CssClasses } from '@skeletonlabs/skeleton';
-	import type { ShareDrawerData } from '$lib/share/ShareDrawerSettings.js';
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
 	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
-	import { onDestroy, onMount } from 'svelte';
-	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
+	import { onMount } from 'svelte';
+	import { initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
 	import type { ShareProvider } from '$lib/providers/index.js';
 	import UtilityShareButton from '$lib/share/UtilityShareButton.svelte';
+	import { closeShareDrawer, shareDrawerState } from './ShareDrawerState.svelte.js';
 
 	interface Props {
-		drawer: Drawer;
 		shareProviders: ShareProvider[];
 		onClipboardSuccess?: () => void;
 		onClipboardFailed?: () => void;
@@ -20,13 +19,12 @@
 		style?: {
 			socialShareButton?: ComponentProps<typeof SocialShareButton>['style'];
 			utilityButton?: ComponentProps<typeof UtilityShareButton>['style'];
-			spacerBackground?: CssClasses;
-			handleBackground?: CssClasses;
+			spacerBackground?: String;
+			handleBackground?: String;
 		};
 	}
 
 	let {
-		drawer,
 		shareProviders,
 		onClipboardSuccess,
 		onClipboardFailed,
@@ -63,22 +61,28 @@
 		handleBackground: style.handleBackground || 'bg-surface-300'
 	});
 
-	const drawerStore = getDrawerStore();
+	
 
-	const shareData = $drawerStore.meta as ShareDrawerData;
 	function handleClipboardCopy() {
-		if (navigator.clipboard && shareData.clipboardMessage) {
-			navigator.clipboard.writeText(shareData.clipboardMessage);
+		if (!shareDrawerState.meta) {
+			onClipboardFailed?.();
+			return;
+		}
+		if (navigator.clipboard && shareDrawerState.meta.clipboardMessage) {
+			navigator.clipboard.writeText(shareDrawerState.meta.clipboardMessage);
 			onClipboardSuccess?.();
 		} else {
 			onClipboardFailed?.();
 		}
-		drawerStore.close();
+		closeShareDrawer();
 	}
 
 	function handleDownload(): any {
+		if (!shareDrawerState.meta) {
+			return;
+		}
 		const link = document.createElement('a');
-		link.href = shareData.files ? URL.createObjectURL(shareData.files[0]) : '';
+		link.href = shareDrawerState.meta.files ? URL.createObjectURL(shareDrawerState.meta.files[0]) : '';
 		link.download = 'minesweeper.png';
 		document.body.appendChild(link);
 		link.click();
@@ -87,43 +91,57 @@
 	}
 
 	onMount(() => {
-		initDrawer(drawer, drawerStore, onClose);
-	});
-
-	onDestroy(() => {
-		destroyDrawer(drawer);
+		initDrawer(shareDrawerState, onClose);
 	});
 </script>
 
-<div class="share-drawer-content flex flex-col items-center py-4">
-	<div class="handle my-2 h-2 w-10 rounded-full {computedStyle.handleBackground}"></div>
-	<div class="drawer-content flex w-full flex-col items-center">
-		<div class="mx-auto my-2 flex max-w-full snap-x gap-5 overflow-x-auto px-4 py-3 md:px-8">
-			{#each shareProviders as provider}
-				<SocialShareButton
-					style={computedStyle.socialShareButton}
-					{provider}
-					{shareData}
-					onclick={() => {
-						const continued = onSocialShare ? onSocialShare(provider.name) : true;
-						if (continued) {
-							drawerStore.close();
-						}
-					}}
-				/>
-			{/each}
-		</div>
-		<div class="spacer my-2 h-[1px] w-full {computedStyle.spacerBackground}"></div>
-		{#if shareData.files && shareData.files.length > 0}
-			<UtilityShareButton style={computedStyle.utilityButton} onclick={() => handleDownload()}
-				>Download image <Icon icon="tabler:file-download" /></UtilityShareButton
-			>
+<Modal
+	bind:open={shareDrawerState.open}
+	triggerBase="btn preset-tonal"
+	contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-[480px] h-screen"
+	positionerJustify="justify-start"
+	positionerAlign=""
+	positionerPadding=""
+	transitionsPositionerIn={{ x: -480, duration: 200 }}
+	transitionsPositionerOut={{ x: -480, duration: 200 }}
+>
+	{#snippet content()}
+		{@const shareData = shareDrawerState.meta}
+		{#if shareData}
+			<div class="share-drawer-content flex flex-col items-center py-4">
+				<div class="handle my-2 h-2 w-10 rounded-full {computedStyle.handleBackground}"></div>
+				<div class="drawer-content flex w-full flex-col items-center">
+					<div class="mx-auto my-2 flex max-w-full snap-x gap-5 overflow-x-auto px-4 py-3 md:px-8">
+						{#each shareProviders as provider}
+							<SocialShareButton
+								style={computedStyle.socialShareButton}
+								{provider}
+								{shareData}
+								onclick={() => {
+									const continued = onSocialShare ? onSocialShare(provider.name) : true;
+									if (continued) {
+										closeShareDrawer();
+									}
+								}}
+							/>
+						{/each}
+					</div>
+					<div class="spacer my-2 h-[1px] w-full {computedStyle.spacerBackground}"></div>
+					{#if shareData.files && shareData.files.length > 0}
+						<UtilityShareButton style={computedStyle.utilityButton} onclick={() => handleDownload()}
+							>Download image <Icon icon="tabler:file-download" /></UtilityShareButton
+						>
+					{/if}
+					<UtilityShareButton
+						style={computedStyle.utilityButton}
+						onclick={() => handleClipboardCopy()}
+						>Copy to clipboard <Icon icon="tabler:clipboard-copy" /></UtilityShareButton
+					>
+				</div>
+			</div>
 		{/if}
-		<UtilityShareButton style={computedStyle.utilityButton} onclick={() => handleClipboardCopy()}
-			>Copy to clipboard <Icon icon="tabler:clipboard-copy" /></UtilityShareButton
-		>
-	</div>
-</div>
+	{/snippet}
+</Modal>
 
 <style>
 	:global(.drawer) {
