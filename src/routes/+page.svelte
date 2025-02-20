@@ -18,7 +18,7 @@
 		>Open Share Drawer</button
 	>
 	<div class="fixed right-2 top-2 flex items-center justify-center gap-2">
-		<!-- <ThemeSelect />
-		<LightSwitch /> -->
+		<ThemeSelect />
+		<LightSwitch />
 	</div>
 </div>

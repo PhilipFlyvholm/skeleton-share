@@ -12,7 +12,30 @@ const config = {
 	plugins: [
 		skeleton({
 			// NOTE: each theme included will increase the size of your CSS bundle
-			themes: [themes.cerberus, themes.rose]
+			themes: [
+				themes.catppuccin,
+				themes.cerberus,
+				themes.concord,
+				themes.crimson,
+				themes.fennec,
+				themes.hamlindigo,
+				themes.legacy,
+				themes.mint,
+				themes.modern,
+				themes.mona,
+				themes.nosh,
+				themes.nouveau,
+				themes.pine,
+				themes.reign,
+				themes.rocket,
+				themes.rose,
+				themes.sahara,
+				themes.seafoam,
+				themes.terminus,
+				themes.vintage,
+				themes.vox,
+				themes.wintry
+			]
 		})
 	]
 } satisfies Config;
