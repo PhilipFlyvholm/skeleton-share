@@ -61,8 +61,6 @@
 		handleBackground: style.handleBackground || 'bg-surface-300'
 	});
 
-	
-
 	function handleClipboardCopy() {
 		if (!shareDrawerState.meta) {
 			onClipboardFailed?.();
@@ -82,7 +80,9 @@
 			return;
 		}
 		const link = document.createElement('a');
-		link.href = shareDrawerState.meta.files ? URL.createObjectURL(shareDrawerState.meta.files[0]) : '';
+		link.href = shareDrawerState.meta.files
+			? URL.createObjectURL(shareDrawerState.meta.files[0])
+			: '';
 		link.download = 'minesweeper.png';
 		document.body.appendChild(link);
 		link.click();
@@ -98,12 +98,13 @@
 <Modal
 	bind:open={shareDrawerState.open}
 	triggerBase="btn preset-tonal"
-	contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-[480px] h-screen"
+	contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-full h-auto"
+	positionerBase="fixed bottom-0 left-1/2 -translate-x-1/2 w-[480px] right-0 z-[999]"
 	positionerJustify="justify-start"
 	positionerAlign=""
 	positionerPadding=""
-	transitionsPositionerIn={{ x: -480, duration: 200 }}
-	transitionsPositionerOut={{ x: -480, duration: 200 }}
+	transitionsPositionerIn={{ y: 480, duration: 200 }}
+	transitionsPositionerOut={{ y: 480, duration: 200 }}
 >
 	{#snippet content()}
 		{@const shareData = shareDrawerState.meta}

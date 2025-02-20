@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { Popover } from '@skeletonlabs/skeleton-svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
-    const themes = [
+	const themes = [
 		{ type: 'skeleton', name: 'Skeleton', icon: '💀' },
 		{ type: 'wintry', name: 'Wintry', icon: '🌨️' },
 		{ type: 'modern', name: 'Modern', icon: '🤖' },
@@ -27,11 +27,12 @@
 
 <Popover>
 	{#snippet trigger()}
+		<!--
 		<button class="variant-soft-surface btn hover:variant-soft-primary">
 			<i class="fa-solid fa-palette text-lg md:!hidden"></i>
 			<span class="hidden md:inline-block">Theme</span>
 			<i class="fa-solid fa-caret-down opacity-50"></i>
-		</button>
+		</button>-->
 	{/snippet}
 	{#snippet content()}
 		<div class="card w-60 p-4 shadow-xl" data-popup="theme">
