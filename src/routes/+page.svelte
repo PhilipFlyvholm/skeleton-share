@@ -14,10 +14,12 @@
 <div class="container m-auto flex h-full flex-col items-center justify-center">
 	<h1 class="gradient-heading h1 font-mono font-bold">Skeleton share</h1>
 	<p>Native-like web sharing created with Skeleton and Svelte</p>
-	<button type="button" class="btn my-2 preset-filled" onclick={() => openShareDrawer(shareDrawer)}
-		>Open Share Drawer</button
+	<button
+		type="button"
+		class="btn preset-filled-primary-500 my-2"
+		onclick={() => openShareDrawer(shareDrawer)}>Open Share Drawer</button
 	>
-	<div class="fixed right-2 top-2 flex items-center justify-center gap-2">
+	<div class="fixed top-2 right-2 flex items-center justify-center gap-2">
 		<ThemeSelect />
 		<LightSwitch />
 	</div>

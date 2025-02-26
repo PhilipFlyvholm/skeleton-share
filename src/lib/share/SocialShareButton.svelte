@@ -28,7 +28,7 @@
 	href={props.provider.getShareUrl(props.shareData)}
 	{onclick}
 	target="_blank"
-	class="btn flex min-w-[72px] snap-center flex-col items-center justify-center p-0"
+	class="btn-icon flex h-auto min-w-[72px] snap-center flex-col items-center justify-center p-0"
 >
 	<div class={classes} class:p-2={!props.provider.image}>
 		{#if props.provider.image}

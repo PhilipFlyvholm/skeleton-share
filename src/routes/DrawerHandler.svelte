@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ShareDrawer from '$lib/share/ShareDrawer.svelte';
-	//import ShareDrawer2 from '$lib/share/ShareDrawer2.svelte';
 	import {
 		EmailProvider,
 		FacebookProvider,
@@ -20,9 +19,6 @@
 		LinkedInProvider
 	];
 </script>
-
-<!-- 
-<ShareDrawer2 /> -->
 
 <ShareDrawer
 	{shareProviders}

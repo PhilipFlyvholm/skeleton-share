@@ -12,14 +12,15 @@
 		if (mode) html.classList.add('dark');
 		else html.classList.remove('dark');
 	}
-
-	$effect(() => {
-		handleModeChange(mode);
-	});
 </script>
 
-<Switch name="mode" controlActive="bg-surface-200" bind:checked={mode}>
-	{#snippet inactiveChild()}
+<Switch
+	name="mode"
+	controlActive="bg-surface-200"
+	bind:checked={mode}
+	onCheckedChange={() => handleModeChange(mode)}
+>
+	{#snippet activeChild()}
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="14"
@@ -39,7 +40,7 @@
 			></path><!----><path d="m19.07 4.93-1.41 1.41"></path><!----><!----><!----></svg
 		>
 	{/snippet}
-	{#snippet activeChild()}
+	{#snippet inactiveChild()}
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="14"

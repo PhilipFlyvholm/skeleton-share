@@ -28,7 +28,7 @@
 @import '@skeletonlabs/skeleton/themes/vox';
 @import '@skeletonlabs/skeleton/themes/wintry';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -45,6 +45,10 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+}
+:root{
+
+  color-scheme: light dark;
 }
 
 html,

@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { get } from 'svelte/store';
-import type { ShareDrawerState } from './share/ShareDrawerSettings.js';
+import type { ShareDrawerState } from './share/ShareDrawerState.svelte.js';
 const extraOffsetPercentage = 0.5;
 
 let initial = { x: 0, y: 0, height: 0 };
@@ -9,6 +7,7 @@ let prev = 0;
 let momentum = 0;
 
 let onClose = $state<(() => void) | undefined>(undefined);
+let drawerState: ShareDrawerState | undefined;
 
 const isTouchEvent = (e: Event): e is TouchEvent => window.TouchEvent && e instanceof TouchEvent;
 
@@ -16,8 +15,8 @@ function setTranslate(drawer: HTMLElement, y: number) {
 	drawer.style.transform = `translateY(${y}px)`;
 }
 
-function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
-	if (e.detail instanceof MouseEvent && e.detail.button !== 0) return;
+function handleMouseDown(e: MouseEvent | TouchEvent) {
+	if (e instanceof MouseEvent && e.button !== 0) return;
 
 	//if (!drawerStore || !get(drawerStore).open) return;
 	const drawerContent = document.querySelector('.drawer-content');
@@ -31,8 +30,8 @@ function handleMouseDown(e: CustomEvent<MouseEvent> | TouchEvent) {
 	if (!drawer) return;
 	const isTouch = isTouchEvent(e);
 	if (!isTouch) e.preventDefault();
-	const clientX = isTouch ? e.touches[0].clientX : e.detail.clientX;
-	const clientY = isTouch ? e.touches[0].clientY : e.detail.clientY;
+	const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+	const clientY = isTouch ? e.touches[0].clientY : e.clientY;
 	initial = {
 		x: clientX,
 		y: clientY,
@@ -90,7 +89,7 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 		initial.height + diff < initial.height / 2 &&
 		(momentum < 0 || (initial.height + diff) * 0.1 < initial.height / 2)
 	) {
-		//drawerStore && drawerStore.close();
+		if(drawerState) drawerState.open = false;
 		onClose?.();
 		reset(false);
 	} else {
@@ -98,6 +97,7 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleBackdrop(e: CustomEvent<MouseEvent>) {
 	//if (!isShareDrawer()) return;
 	if (!drawer) return;
@@ -116,33 +116,31 @@ function handleSelect(e: Event) {
 	e.preventDefault();
 }
 export function initDrawer(
-	drawerState: ShareDrawerState,
+	newDrawerState: ShareDrawerState,
 	onCloseCallback: typeof onClose
 ) {
-	//if (!drawerComponent) return;
+	drawerState = newDrawerState
 	onClose = onCloseCallback;
-	//drawerStore = drawerStoreInstance;
-	//drawerComponent.$on('drawer', handleMouseDown);
-	//drawerComponent.$on('touchstart', handleMouseDown);
-	//drawerComponent.$on('backdrop', handleBackdrop);
+	
 	window.addEventListener('mousemove', handleMouseMove);
 	window.addEventListener('touchmove', handleMouseMove);
+	window.addEventListener('mousedown', handleMouseDown);
+	window.addEventListener('touchstart', handleMouseDown);
 	window.addEventListener('mouseup', handleMouseUp);
 	window.addEventListener('touchend', handleMouseUp);
 	window.addEventListener('selectstart', handleSelect);
 }
-/*
-export function destroyDrawer(drawerComponent: Drawer | undefined) {
-	if (!drawerComponent) return;
+
+export function destroyDrawer() {
+	if(!window) return;
 	window.removeEventListener('mousemove', handleMouseMove);
 	window.removeEventListener('touchmove', handleMouseMove);
 	window.removeEventListener('mouseup', handleMouseUp);
 	window.removeEventListener('touchend', handleMouseUp);
 	window.removeEventListener('selectstart', handleSelect);
 
-	drawerStore = undefined;
 	initial = { x: 0, y: 0, height: 0 };
 	drawer = null;
 	prev = 0;
 	momentum = 0;
-}*/
+}

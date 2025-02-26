@@ -3,8 +3,8 @@
 	import Icon from '@iconify/svelte';
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
 	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
-	import { onMount } from 'svelte';
-	import { initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
+	import { onDestroy, onMount } from 'svelte';
+	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
 	import type { ShareProvider } from '$lib/providers/index.js';
 	import UtilityShareButton from '$lib/share/UtilityShareButton.svelte';
 	import { closeShareDrawer, shareDrawerState } from './ShareDrawerState.svelte.js';
@@ -42,7 +42,7 @@
 		...style,
 		socialShareButton: {
 			...style.socialShareButton,
-			background: style.socialShareButton?.background || 'bg-surface-50-900-token',
+			background: style.socialShareButton?.background || 'preset-filled',
 			shadow: style.socialShareButton?.shadow || 'shadow-md',
 			rounded: style.socialShareButton?.rounded || 'rounded-xl',
 			overflow: style.socialShareButton?.overflow || 'overflow-hidden',
@@ -50,7 +50,7 @@
 		},
 		utilityButton: {
 			...style.utilityButton,
-			background: style.utilityButton?.background || 'bg-surface-50-900-token',
+			background: style.utilityButton?.background || 'preset-filled',
 			shadow: style.utilityButton?.shadow || 'shadow-sm',
 			rounded: style.utilityButton?.rounded || '',
 			overflow: style.utilityButton?.overflow || '',
@@ -92,13 +92,16 @@
 
 	onMount(() => {
 		initDrawer(shareDrawerState, onClose);
+		return () => {
+			destroyDrawer();
+		};
 	});
 </script>
 
 <Modal
 	bind:open={shareDrawerState.open}
 	triggerBase="btn preset-tonal"
-	contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-full h-auto"
+	contentBase="drawer bg-surface-100 dark:bg-surface-900 p-4 space-y-4 shadow-xl w-full h-auto rounded-t-xl"
 	positionerBase="fixed bottom-0 left-1/2 -translate-x-1/2 w-[480px] right-0 z-999"
 	positionerJustify="justify-start"
 	positionerAlign=""
