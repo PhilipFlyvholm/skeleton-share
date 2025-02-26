@@ -1,5 +1,5 @@
 <script>
-	import '../app.pcss';
+	import '../app.css';
 	import DrawerHandler from './DrawerHandler.svelte';
 	import Footer from './footer.svelte';
 

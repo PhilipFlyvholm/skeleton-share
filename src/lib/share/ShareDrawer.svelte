@@ -46,12 +46,12 @@
 			shadow: style.socialShareButton?.shadow || 'shadow-md',
 			rounded: style.socialShareButton?.rounded || 'rounded-xl',
 			overflow: style.socialShareButton?.overflow || 'overflow-hidden',
-			text: style.socialShareButton?.text || 'mt-1 !mx-0'
+			text: style.socialShareButton?.text || 'mt-1 mx-0!'
 		},
 		utilityButton: {
 			...style.utilityButton,
 			background: style.utilityButton?.background || 'bg-surface-50-900-token',
-			shadow: style.utilityButton?.shadow || 'shadow',
+			shadow: style.utilityButton?.shadow || 'shadow-sm',
 			rounded: style.utilityButton?.rounded || '',
 			overflow: style.utilityButton?.overflow || '',
 			margin: style.utilityButton?.margin || 'my-2',
@@ -99,7 +99,7 @@
 	bind:open={shareDrawerState.open}
 	triggerBase="btn preset-tonal"
 	contentBase="bg-surface-100-900 p-4 space-y-4 shadow-xl w-full h-auto"
-	positionerBase="fixed bottom-0 left-1/2 -translate-x-1/2 w-[480px] right-0 z-[999]"
+	positionerBase="fixed bottom-0 left-1/2 -translate-x-1/2 w-[480px] right-0 z-999"
 	positionerJustify="justify-start"
 	positionerAlign=""
 	positionerPadding=""

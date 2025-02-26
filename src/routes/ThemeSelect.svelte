@@ -32,7 +32,7 @@
 		const theme = formData.get('theme')?.toString();
 
 		if (theme) {
-			document.body.setAttribute('data-theme', theme);
+			document.getElementsByTagName('html')[0]?.setAttribute('data-theme', theme);
 			storeTheme = theme;
 		}
 	};
@@ -41,7 +41,7 @@
 <Popover>
 	{#snippet trigger()}
 		<button class="variant-soft-surface hover:variant-soft-primary btn">
-			<i class="fa-solid fa-palette text-lg md:!hidden"></i>
+			<i class="fa-solid fa-palette text-lg md:hidden!"></i>
 			<span class="hidden md:inline-block">Theme</span>
 			<i class="fa-solid fa-caret-down opacity-50"></i>
 		</button>
