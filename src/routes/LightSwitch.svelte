@@ -9,7 +9,7 @@
 		const htmlList = document.getElementsByTagName('html');
 		if (!htmlList || !htmlList[0]) return;
 		const html = htmlList[0];
-		if (mode) html.classList.add('dark');
+		if (!mode) html.classList.add('dark');
 		else html.classList.remove('dark');
 	}
 </script>
@@ -17,8 +17,11 @@
 <Switch
 	name="mode"
 	controlActive="bg-surface-200"
-	bind:checked={mode}
-	onCheckedChange={() => handleModeChange(mode)}
+	checked={mode}
+	onCheckedChange={(e) => {
+		mode = e.checked;
+		handleModeChange(e.checked);
+	}}
 >
 	{#snippet activeChild()}
 		<svg
