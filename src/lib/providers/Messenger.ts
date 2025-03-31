@@ -10,7 +10,7 @@ const MessengerProvider = (FACEBOOK_APP_ID: string): ShareProvider => ({
 		url.searchParams.append('title', text);
 		const urlEncoded = encodeURIComponent(url.toString());
 		const app_id = encodeURIComponent(FACEBOOK_APP_ID || '');
-		const shareUrl = `http://www.facebook.com/dialog/send?&app_id=${app_id}&link=${urlEncoded}&redirect_uri=https://3dminesweeper.com`;
+		const shareUrl = `https://www.facebook.com/dialog/send?&app_id=${app_id}&link=${urlEncoded}&redirect_uri=https://3dminesweeper.com`;
 		return shareUrl;
 	}
 });
