@@ -43,10 +43,8 @@ function handleMouseDown(e: MouseEvent | TouchEvent) {
 }
 
 function handleMouseMove(e: MouseEvent | TouchEvent) {
-	//if (!isShareDrawer()) return;
 	if (!drawer) return;
 
-	//if (!drawerStore || !get(drawerStore).open) return;
 	const clientY = isTouchEvent(e) ? e.touches[0].clientY : e.clientY;
 	let diff = initial.y - clientY;
 	if (initial.y - clientY < 0) {
@@ -71,7 +69,6 @@ function reset(transform: boolean) {
 }
 
 function handleMouseUp(e: MouseEvent | TouchEvent) {
-	//if (!isShareDrawer()) return;
 	if (e instanceof MouseEvent && e.button !== 0) return;
 
 	if (!drawer) return;
@@ -89,7 +86,7 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 		initial.height + diff < initial.height / 2 &&
 		(momentum < 0 || (initial.height + diff) * 0.1 < initial.height / 2)
 	) {
-		if(drawerState) drawerState.open = false;
+		if (drawerState) drawerState.open = false;
 		onClose?.();
 		reset(false);
 	} else {
@@ -97,31 +94,14 @@ function handleMouseUp(e: MouseEvent | TouchEvent) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function handleBackdrop(e: CustomEvent<MouseEvent>) {
-	//if (!isShareDrawer()) return;
-	if (!drawer) return;
-
-	e.preventDefault();
-	setTimeout(() => {
-	//	if (!drawer && drawerStore) drawerStore.close();
-		console.log('backdrop');
-		
-		onClose?.();
-	}, 2);
-}
-
 function handleSelect(e: Event) {
 	if (!drawer) return;
 	e.preventDefault();
 }
-export function initDrawer(
-	newDrawerState: ShareDrawerState,
-	onCloseCallback: typeof onClose
-) {
-	drawerState = newDrawerState
+export function initDrawer(newDrawerState: ShareDrawerState, onCloseCallback: typeof onClose) {
+	drawerState = newDrawerState;
 	onClose = onCloseCallback;
-	
+
 	window.addEventListener('mousemove', handleMouseMove);
 	window.addEventListener('touchmove', handleMouseMove);
 	window.addEventListener('mousedown', handleMouseDown);
@@ -132,7 +112,7 @@ export function initDrawer(
 }
 
 export function destroyDrawer() {
-	if(!window) return;
+	if (!window) return;
 	window.removeEventListener('mousemove', handleMouseMove);
 	window.removeEventListener('touchmove', handleMouseMove);
 	window.removeEventListener('mouseup', handleMouseUp);
