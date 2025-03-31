@@ -1,4 +1,4 @@
-import type { Actions } from "@sveltejs/kit";
+import type { Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
 	// This action is called when the user clicks the theme button

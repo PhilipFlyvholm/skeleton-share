@@ -1,15 +1,24 @@
 <script lang="ts">
-	import type { CssClasses } from "@skeletonlabs/skeleton";
+	interface Props {
+		style: {
+			background?: string;
+			color?: string;
+			shadow?: string;
+			rounded?: string;
+			overflow?: string;
+			margin?: string;
+			width?: string;
+		};
+		onclick?: () => void;
+		children?: import('svelte').Snippet;
+	}
 
-	export let style:{
-        background?: CssClasses,
-        color?: CssClasses,
-        shadow?: CssClasses,
-        rounded?: CssClasses,
-        overflow?: CssClasses,
-        margin?: CssClasses,
-        width?: CssClasses
-    };
+	let { style, children, onclick }: Props = $props();
 </script>
 
-<button class="btn flex justify-between {style.background} {style.shadow} {style.rounded} {style.margin} {style.overflow} {style.margin} {style.width} {style.color}" on:click><slot /></button>
+<button
+	class="btn flex justify-between {style.background} {style.shadow} {style.rounded} {style.margin} {style.overflow} {style.margin} {style.width} {style.color}"
+	{onclick}
+>
+	{@render children?.()}
+</button>
