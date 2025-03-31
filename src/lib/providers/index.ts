@@ -1,4 +1,5 @@
-import type { ShareDrawerData } from '../share/ShareDrawerSettings.js';
+import type { ShareDrawerData } from '$lib/share/ShareDrawerState.svelte.js';
+
 export interface ShareProvider {
 	getShareUrl: (shareData: ShareDrawerData, providerData?: unknown) => string;
 	name: string;

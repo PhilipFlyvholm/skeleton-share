@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import { Modal } from '@skeletonlabs/skeleton-svelte';
 	import SocialShareButton from '$lib/share/SocialShareButton.svelte';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { destroyDrawer, initDrawer } from '$lib/ShareDrawerHandler.svelte.js';
 	import type { ShareProvider } from '$lib/providers/index.js';
 	import UtilityShareButton from '$lib/share/UtilityShareButton.svelte';
@@ -99,7 +99,8 @@
 </script>
 
 <Modal
-	bind:open={shareDrawerState.open}
+	open={shareDrawerState.open}
+	onOpenChange={(e) => (shareDrawerState.open = e.open)}
 	triggerBase="btn preset-tonal"
 	contentBase="drawer bg-surface-100 dark:bg-surface-900 p-4 space-y-4 shadow-xl w-full h-auto rounded-t-xl"
 	positionerBase="fixed bottom-0 left-1/2 -translate-x-1/2 w-[480px] right-0 z-999"
